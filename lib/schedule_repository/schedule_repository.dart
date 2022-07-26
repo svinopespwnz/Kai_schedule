@@ -1,5 +1,5 @@
 import 'package:kai_schedule/api/api_client.dart';
-import 'package:kai_schedule/models/models.dart';
+import 'package:kai_schedule/models/student_schedule.dart';
 
 class ScheduleRepository {
   final ApiClient _apiClient;
@@ -9,7 +9,6 @@ class ScheduleRepository {
     var d0 = DateTime(2022,8,7).millisecondsSinceEpoch;
     var d = DateTime(DateTime.now().year, 1, 1);
     var d1 = d.millisecondsSinceEpoch;
-    var dd = d.day;
     var re = (((d0 - d1) / 8.64e7) + ( 6)).floor();
    return ((re/7).floor() % 2==0) ? true : false ;
   }

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:kai_schedule/models/models.dart';
+import 'package:kai_schedule/api/api_client.dart';
+import 'package:kai_schedule/models/student_schedule.dart';
 import 'package:kai_schedule/schedule_repository/schedule_repository.dart';
 
-void main() {
+void main() async{
   runApp(const MyApp());
+  final _api=ApiClient();
+  print(await _api.getLecturersNamesList());
+  final s=await _api.getLecturerSchedule("Медведев Михаил Викторович");
+print(s.l2.first.disciplName);
 }
 
 class MyApp extends StatelessWidget {

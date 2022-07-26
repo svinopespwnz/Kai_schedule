@@ -1,15 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'models.g.dart';
+part 'student_schedule.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.none, explicitToJson: true)
 class Schedule {
-  List<Lesson> l1;
-  List<Lesson> l2;
-  List<Lesson> l3;
-  List<Lesson> l4;
-  List<Lesson> l5;
-  List<Lesson> l6;
+  final List<Lesson> l1;
+  final List<Lesson> l2;
+  final List<Lesson> l3;
+  final List<Lesson> l4;
+  final List<Lesson> l5;
+  final List<Lesson> l6;
 
   Schedule(
       {required this.l1,
@@ -25,21 +25,21 @@ class Schedule {
 
 @JsonSerializable(fieldRename: FieldRename.none, explicitToJson: true)
 class Lesson {
-  String prepodNameEnc;
-  String dayDate;
-  String audNum;
-  String disciplName;
-  String buildNum;
-  String orgUnitName;
-  String dayTime;
-  String dayNum;
-  String potok;
-  String prepodName;
-  String disciplNum;
-  String orgUnitId;
-  String prepodLogin;
-  String disciplType;
-  String disciplNameEnc;
+  final String prepodNameEnc;
+  final String dayDate;
+  final String audNum;
+  final String disciplName;
+  final String buildNum;
+  final String orgUnitName;
+  final String dayTime;
+  final String dayNum;
+  final String potok;
+  final String prepodName;
+  final String disciplNum;
+  final String orgUnitId;
+  final String prepodLogin;
+  final String disciplType;
+  final String disciplNameEnc;
 
   Lesson(
       {required this.prepodNameEnc,
