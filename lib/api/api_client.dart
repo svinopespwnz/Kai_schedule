@@ -3,39 +3,42 @@ import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:kai_schedule/models/lecturer_schedule.dart';
 import 'package:kai_schedule/models/student_schedule.dart';
+import 'package:kai_schedule/utility/exceptions.dart';
 
 class ApiClient {
-  ApiClient._privateConstructor();
-  static final ApiClient _instance = ApiClient._privateConstructor();
-
-  factory ApiClient() {
-    return _instance;
-  }
   Future<Schedule> fetchStudentScheduleByGroup({required String group}) async {
-    final qParams = {
+    final queryParamsForGroupId = {
       "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
       "p_p_lifecycle": "2",
       "p_p_resource_id": "getGroupsURL",
       "query": group
     };
 
-    final url = Uri.parse('https://kai.ru/raspisanie')
-        .replace(queryParameters: qParams);
-    final response = (await http.get(url));
-    final groupId = (jsonDecode(response.body)).first["id"].toString();
+    final urlGroupId = Uri.parse('https://kai.ru/raspisanie')
+        .replace(queryParameters: queryParamsForGroupId);
+    final groupIdResponse = (await http.get(urlGroupId));
+    if (groupIdResponse.statusCode == 200) {
+      final groupId = (jsonDecode(groupIdResponse.body)).first["id"].toString();
 
-    final params = {
-      "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
-      "p_p_lifecycle": "2",
-      "p_p_resource_id": "schedule",
-      "groupId": groupId
-    };
-    final url2 =
-        Uri.parse('https://kai.ru/raspisanie').replace(queryParameters: params);
+      final queryParamsForSchedule = {
+        "p_p_id": "pubStudentSchedule_WAR_publicStudentSchedule10",
+        "p_p_lifecycle": "2",
+        "p_p_resource_id": "schedule",
+        "groupId": groupId
+      };
+      final urlGroupSchedule = Uri.parse('https://kai.ru/raspisanie')
+          .replace(queryParameters: queryParamsForSchedule);
 
-    final response2 = await http.get(url2);
-    final json = (jsonDecode(response2.body));
-    return Schedule.fromJson(json);
+      final groupScheduleResponse = await http.get(urlGroupSchedule);
+      if (groupScheduleResponse.statusCode == 200) {
+        final json = (jsonDecode(groupScheduleResponse.body));
+        return Schedule.fromJson(json);
+      } else {
+        throw ApiClientException();
+      }
+    } else {
+      throw ApiClientException();
+    }
   }
 
   Future<List<dynamic>> fetchLecturers() async {
@@ -47,16 +50,18 @@ class ApiClient {
     };
     final url = Uri.parse("https://kai.ru/for-staff/raspisanie")
         .replace(queryParameters: params);
-
     final response = (await http.get(url));
-
-    final lecturers = jsonDecode(response.body) as List;
-    return lecturers;
+    if (response.statusCode == 200) {
+      final lecturers = jsonDecode(response.body) as List;
+      return lecturers;
+    } else {
+      throw ApiClientException;
+    }
   }
 
-  Future<List<dynamic>> fetchLecturersNamesList() async {
+  Future<List<String>> fetchLecturersNamesList() async {
     final lecturers = await fetchLecturers();
-    List listOfLecturer = [];
+    List<String> listOfLecturer = [];
     for (var element in lecturers) {
       listOfLecturer.add(element['lecturer']);
     }
@@ -77,8 +82,12 @@ class ApiClient {
     final url = Uri.parse("https://kai.ru/for-staff/raspisanie")
         .replace(queryParameters: params);
     final response = (await http.get(url));
-    final json = jsonDecode(response.body);
-    return LecturerSchedule.fromJson(json);
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      return LecturerSchedule.fromJson(json);
+    } else {
+      throw ApiClientException();
+    }
   }
 
   Future<String> authenticate() async {
@@ -115,7 +124,6 @@ class ApiClient {
         response3.headers['set-cookie']!; //.substring(0, brscookieLength);
 
     return brscookie;
-
   }
 
   Future<void> getScore({String? authToken, String? jsession}) async {
@@ -139,8 +147,8 @@ class ApiClient {
     final authTokenStart = response4.body.indexOf("Liferay.authToken = '") +
         "Liferay.authToken = '".length;
     final authTokenEnd = authTokenStart + 8;
-    final authTokenResponse = response4.body.substring(authTokenStart, authTokenEnd);
+    final authTokenResponse =
+        response4.body.substring(authTokenStart, authTokenEnd);
     await getScore(authToken: authTokenResponse, jsession: jsession);
-
   }
 }

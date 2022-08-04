@@ -3,12 +3,12 @@ part 'lecturer_schedule.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.none, explicitToJson: true)
 class LecturerSchedule {
-  final List<LecturerLesson> l1;
-  final List<LecturerLesson> l2;
-  final List<LecturerLesson> l3;
-  final List<LecturerLesson> l4;
-  final List<LecturerLesson> l5;
-  final List<LecturerLesson> l6;
+  final List<LecturerLesson>? l1;
+  final List<LecturerLesson>? l2;
+  final List<LecturerLesson>? l3;
+  final List<LecturerLesson>? l4;
+  final List<LecturerLesson>? l5;
+  final List<LecturerLesson>? l6;
 
   LecturerSchedule(
       {required this.l1,

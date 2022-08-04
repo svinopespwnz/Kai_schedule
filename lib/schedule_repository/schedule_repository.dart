@@ -52,12 +52,12 @@ class ScheduleRepository {
     return scheduleList;
   }
 
-  Future<List<dynamic>> getLecturersNamesList() async {
+  Future<List<String>> getLecturersNamesList() async {
     final listOfLecturer = await _apiClient.fetchLecturersNamesList();
     return listOfLecturer;
   }
 
-  Future<List<List<LecturerLesson>>> getLecturerSchedule(String name) async {
+  Future<List<List<LecturerLesson>?>> getLecturerSchedule(String name) async {
     final schedule = await _apiClient.fetchLecturerSchedule(name);
     final scheduleList = [
       schedule.l1,
