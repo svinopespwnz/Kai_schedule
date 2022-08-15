@@ -7,6 +7,7 @@ import 'package:kai_schedule/bloc/student_schedule_cubit.dart';
 import 'package:kai_schedule/presentation/lecturer_schedule_screen.dart';
 import 'package:kai_schedule/presentation/student_schedule_screen.dart';
 import 'package:kai_schedule/schedule_repository/schedule_repository.dart';
+import 'package:kai_schedule/utility/styles.dart';
 
 void main() async {
   runApp(MyApp(scheduleRepository: ScheduleRepository()));
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'KAI Schedule',
         theme:
-            ThemeData(primaryColor: Colors.black87, primarySwatch: Colors.grey),
+            ThemeData(primaryColor: Colors.black, primarySwatch: Colors.grey),
         home: BlocProvider(
             create: (context) => NavigationCubit(), child: const RootScreen()),
       ),
@@ -48,7 +49,7 @@ class _RootScreenState extends State<RootScreen> {
       bottomNavigationBar: BlocBuilder<NavigationCubit, NavigationState>(
           builder: (context, state) {
         return BottomNavigationBar(
-          currentIndex: state.index,
+          currentIndex: context.read<NavigationCubit>().state.index,
           items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.schedule), label: 'Расписание'),
@@ -58,22 +59,27 @@ class _RootScreenState extends State<RootScreen> {
           onTap: (index) {
             context.read<NavigationCubit>().getNavBarItem(index);
           },
+          selectedItemColor: Colors.black87,
+          unselectedItemColor: Colors.grey,
+          selectedLabelStyle:
+              AppStyles.selectedLabelStyle,
         );
       }),
       body: BlocBuilder<NavigationCubit, NavigationState>(
           builder: (context, state) {
-        if (state.index == 0) {
-          return BlocProvider(
-              create: (context) =>
-                  StudentScheduleCubit(context.read<ScheduleRepository>()),
-              child: const StudentScheduleScreen());
-        } else if (state.index == 1) {
-          return BlocProvider(
-              create: (context) =>
-                  LecturerScheduleCubit(context.read<ScheduleRepository>()),
-             child: const LecturerScheduleScreen());
-        }
-        return const SizedBox.shrink();
+        return IndexedStack(
+          index: context.read<NavigationCubit>().state.index,
+          children: [
+            BlocProvider(
+                create: (context) =>
+                    StudentScheduleCubit(context.read<ScheduleRepository>()),
+                child: const StudentScheduleScreen()),
+            BlocProvider(
+                create: (context) =>
+                    LecturerScheduleCubit(context.read<ScheduleRepository>()),
+                child: const LecturerScheduleScreen()),
+          ],
+        );
       }),
     );
   }

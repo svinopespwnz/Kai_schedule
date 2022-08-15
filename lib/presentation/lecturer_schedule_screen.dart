@@ -4,6 +4,7 @@ import 'package:kai_schedule/bloc/lecturer_schedule_cubit.dart';
 import 'package:kai_schedule/bloc/lecturer_schedule_state.dart';
 import 'package:kai_schedule/bloc/response_status_enum.dart';
 import 'package:kai_schedule/models/lecturer_schedule.dart';
+import 'package:kai_schedule/utility/styles.dart';
 
 class LecturerScheduleScreen extends StatefulWidget {
   const LecturerScheduleScreen({Key? key}) : super(key: key);
@@ -50,7 +51,7 @@ class _LecturerScheduleScreenState extends State<LecturerScheduleScreen>
         }
       },
       builder: (context, state) => Scaffold(
-        backgroundColor: const Color(0xFFEBEEF2),
+        backgroundColor: AppStyles.backgroundColor,
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Row(
@@ -112,26 +113,15 @@ class BodyTabView extends StatelessWidget {
         ? const Center(
             child: Text('Введите имя преподавателя'),
           )
-        : (cubitState.status == ResponseStatus.success
-            ? TabBarView(
-                controller: _tabController,
-                children: [
-                  DayScheduleWidget(data: schedule[0]),
-                  DayScheduleWidget(data: schedule[1]),
-                  DayScheduleWidget(data: schedule[2]),
-                  DayScheduleWidget(data: schedule[3]),
-                  DayScheduleWidget(data: schedule[4]),
-                  DayScheduleWidget(data: schedule[5]),
-                ],
-              )
-            : const Center(
-                child: Text('Нет занятий'),
-              ));
+        : TabBarView(
+            controller: _tabController,
+            children: List.generate(
+                6, (index) => LecturerDayScheduleWidget(data: schedule[index])));
   }
 }
 
-class DayScheduleWidget extends StatelessWidget {
-  const DayScheduleWidget({Key? key, required this.data}) : super(key: key);
+class LecturerDayScheduleWidget extends StatelessWidget {
+  const LecturerDayScheduleWidget({Key? key, required this.data}) : super(key: key);
   final List<LecturerLesson>? data;
 
   @override
@@ -158,26 +148,52 @@ class LectureCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 4.0),
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
             child: Row(children: [
               Expanded(
                 flex: 1,
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(data.dayTime),
-                      Text('Здание: ${data.buildNum}'),
-                      Text('Ауд: ${data.audNum}')
+                      Text(
+                        data.dayTime.trim(),
+                        style: AppStyles.dayTimeTextStyle,
+                      ),
+                      Text('Здание: ${data.buildNum}'.trim(),
+                          style: AppStyles.buildingTextStyle),
+                      Text('Ауд: ${data.audNum}'.trim(),
+                          style: AppStyles.auditoriumTextStyle)
                     ]),
               ),
+              const SizedBox(
+                width: 10,
+              ),
               Expanded(
-                flex: 2,
-                child: Text(
-                  data.disciplName,
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data.disciplName.trim(),
+                      style: AppStyles.disciplineNameTextStyle,
+                    ),
+                    Text(
+                      data.disciplType.trim(),
+                      style: AppStyles.disciplineTypeTextStyle,
+                    ),
+                    Text(
+                      data.group.trim(),
+                      style: AppStyles.groupNumberTextStyle,
+                    ),
+                    Text(
+                      data.dayDate.trim(),
+                      style: AppStyles.dayDateTextStyle,
+                    )
+                  ],
                 ),
               ),
             ]),

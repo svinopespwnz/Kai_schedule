@@ -5,6 +5,7 @@ import 'package:kai_schedule/bloc/response_status_enum.dart';
 import 'package:kai_schedule/bloc/student_schedule_cubit.dart';
 import 'package:kai_schedule/bloc/student_schedule_state.dart';
 import 'package:kai_schedule/models/student_schedule.dart';
+import 'package:kai_schedule/utility/styles.dart';
 
 class StudentScheduleScreen extends StatefulWidget {
   const StudentScheduleScreen({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
         }
       },
       builder: (context, state) => Scaffold(
-        backgroundColor: const Color(0xFFEBEEF2),
+        backgroundColor: AppStyles.backgroundColor,
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Row(
@@ -63,16 +64,18 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
             children: [
               cubit.state.isButton
                   ? GestureDetector(
-                      child: Column(children: [
-                        Row(children: [
-                          cubit.state.group.isEmpty
-                              ? const Text('Группа: ?')
-                              : Text(cubit.state.group),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.create)
-                        ]),
-                        Text(cubit.state.isWeekEven ? 'Четная' : 'Нечетная')
-                      ]),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(children: [
+                              cubit.state.group.isEmpty
+                                  ? const Text('Группа: ?')
+                                  : Text(cubit.state.group),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.create,color: AppStyles.iconColor,)
+                            ]),
+                            Text(cubit.state.isWeekEven ? 'Четная' : 'Нечетная')
+                          ]),
                       onTap: () {
                         cubit.toggleTextField(true);
                       },
@@ -94,8 +97,8 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
               FlutterSwitch(
                   activeTextColor: Colors.black87,
                   inactiveTextColor: Colors.black87,
-                  inactiveColor: const Color(0xFFcacaca),
-                  activeColor: const Color(0xFFcacaca),
+                  inactiveColor: AppStyles.backgroundColor,
+                  activeColor: AppStyles.backgroundColor,
                   activeText: "Четная",
                   inactiveText: "Нечетная",
                   valueFontSize: 14.0,
@@ -145,20 +148,14 @@ class BodyTabView extends StatelessWidget {
           )
         : TabBarView(
             controller: _tabController,
-            children: [
-              DayScheduleWidget(data: schedule[0]),
-              DayScheduleWidget(data: schedule[1]),
-              DayScheduleWidget(data: schedule[2]),
-              DayScheduleWidget(data: schedule[3]),
-              DayScheduleWidget(data: schedule[4]),
-              DayScheduleWidget(data: schedule[5]),
-            ],
-          );
+            children: List.generate(
+                6, (index) => StudentDayScheduleWidget(data: schedule[index])));
   }
 }
 
-class DayScheduleWidget extends StatelessWidget {
-  const DayScheduleWidget({Key? key, required this.data}) : super(key: key);
+class StudentDayScheduleWidget extends StatelessWidget {
+  const StudentDayScheduleWidget({Key? key, required this.data})
+      : super(key: key);
   final List<Lesson> data;
 
   @override
@@ -185,26 +182,52 @@ class LectureCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 4.0),
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
             child: Row(children: [
               Expanded(
                 flex: 1,
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(data.dayTime),
-                      Text('Здание: ${data.buildNum}'),
-                      Text('Ауд: ${data.audNum}')
+                      Text(
+                        data.dayTime.trim(),
+                        style: AppStyles.dayTimeTextStyle,
+                      ),
+                      Text('Здание: ${data.buildNum}'.trim(),
+                          style: AppStyles.buildingTextStyle),
+                      Text('Ауд: ${data.audNum}'.trim(),
+                          style: AppStyles.auditoriumTextStyle)
                     ]),
               ),
+              const SizedBox(
+                width: 10,
+              ),
               Expanded(
-                flex: 2,
-                child: Text(
-                  data.disciplName,
+                flex:3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data.disciplName,
+                      style: AppStyles.disciplineNameTextStyle,
+                    ),
+                    Text(
+                      data.disciplType,
+                      style: AppStyles.disciplineTypeTextStyle,
+                    ),
+                    Text(
+                      data.prepodName,
+                      style: AppStyles.lecturerTextStyle,
+                    ),
+                    Text(
+                      data.dayDate,
+                      style: AppStyles.dayDateTextStyle,
+                    )
+                  ],
                 ),
               ),
             ]),

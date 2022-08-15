@@ -59,7 +59,7 @@ class ScheduleRepository {
 
   Future<List<List<LecturerLesson>?>> getLecturerSchedule(String name) async {
     final schedule = await _apiClient.fetchLecturerSchedule(name);
-    final scheduleList = [
+    final list = [
       schedule.l1,
       schedule.l2,
       schedule.l3,
@@ -67,6 +67,30 @@ class ScheduleRepository {
       schedule.l5,
       schedule.l6,
     ];
+    final List<LecturerLesson> dayScheduleList = [];
+    final List<List<LecturerLesson>?> scheduleList = [];
+    String previousTime = '';
+    String previousDate = '';
+    for (var day in list) {
+      if (day != null) {
+        dayScheduleList.clear();
+        for (var lecture in day) {
+          if (lecture.dayTime == previousTime &&
+              lecture.dayDate == previousDate) {
+            dayScheduleList.last.group += ', ${lecture.group}';
+            continue;
+          }
+          previousDate = lecture.dayDate;
+          previousTime = lecture.dayTime;
+          dayScheduleList.add(lecture);
+        }
+        previousTime = '';
+        previousDate = '';
+        scheduleList.add([...dayScheduleList]);
+      } else {
+        scheduleList.add(day);
+      }
+    }
     return scheduleList;
   }
 }

@@ -32,7 +32,7 @@ class LecturerLesson {
   final String disciplType;
   final String buildNum;
   final String disciplName;
-  final String group;
+   String group;
   final String dayTime;
 
   LecturerLesson(
