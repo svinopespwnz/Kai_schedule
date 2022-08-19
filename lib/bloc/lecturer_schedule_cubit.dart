@@ -22,11 +22,12 @@ class LecturerScheduleCubit extends Cubit<LecturerScheduleState> {
 
   Future<void> getLecturersSchedule(String name) async {
     if (name.isEmpty) return;
-    if (state.name == name) return;
+    if (state.name == name && state.status==ResponseStatus.success) return;
     try {
       emit(state.copyWith(
         name: name,
         isLoading: true,
+        status: ResponseStatus.success
       ));
       final schedule = await _scheduleRepository.getLecturerSchedule(name);
       emit(state.copyWith(data: schedule, isLoading: false,status: ResponseStatus.success));

@@ -7,7 +7,7 @@ import 'package:kai_schedule/bloc/student_schedule_state.dart';
 import 'package:kai_schedule/models/student_schedule.dart';
 import 'package:kai_schedule/utility/styles.dart';
 
-class StudentScheduleScreen extends StatefulWidget {
+class StudentScheduleScreen extends StatefulWidget  {
   const StudentScheduleScreen({Key? key}) : super(key: key);
 
   @override
@@ -15,9 +15,9 @@ class StudentScheduleScreen extends StatefulWidget {
 }
 
 class _StudentScheduleScreenState extends State<StudentScheduleScreen>
-    with SingleTickerProviderStateMixin {
-  final _textController = TextEditingController();
-  String get _text => _textController.text;
+    with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin<StudentScheduleScreen> {
+  @override
+  bool get wantKeepAlive => true;
   late TabController _tabController;
 
   final tabs = const [
@@ -30,7 +30,6 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
   ];
   @override
   void dispose() {
-    _textController.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -46,13 +45,26 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<StudentScheduleCubit>();
     return BlocConsumer<StudentScheduleCubit, StudentScheduleState>(
       listener: (context, state) {
         if (state.status == ResponseStatus.failure) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Ошибка получения данных, попробуйте позже')));
+              content: Text(
+                  'Ошибка получения данных, попробуйте позже или проверьте интернет')));
+        } else if (state.status == ResponseStatus.groupFailure) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('Группа не найдена')));
         }
+      },
+      listenWhen: (previous, current) {
+        if ((current.status == ResponseStatus.failure ||
+                current.status == ResponseStatus.groupFailure) &&
+            current.isLoading == false)
+          return (current.isButton == true);
+        else
+          return false;
       },
       builder: (context, state) => Scaffold(
         backgroundColor: AppStyles.backgroundColor,
@@ -72,7 +84,10 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
                                   ? const Text('Группа: ?')
                                   : Text(cubit.state.group),
                               const SizedBox(width: 8),
-                              const Icon(Icons.create,color: AppStyles.iconColor,)
+                              const Icon(
+                                Icons.create,
+                                color: AppStyles.iconColor,
+                              )
                             ]),
                             Text(cubit.state.isWeekEven ? 'Четная' : 'Нечетная')
                           ]),
@@ -83,15 +98,13 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
                   : TextField(
                       keyboardType: TextInputType.phone,
                       autofocus: true,
-                      controller: _textController,
                       decoration: const InputDecoration(
                           hintText: 'Введите № группы',
                           constraints: BoxConstraints(maxWidth: 150)),
                       onSubmitted: (value) async {
                         await cubit.getStudentScheduleByGroup(
-                          _text,
+                          value,
                         );
-                        cubit.toggleTextField(false);
                       },
                     ),
               FlutterSwitch(
@@ -142,7 +155,7 @@ class BodyTabView extends StatelessWidget {
     final schedule = scheduleList.isNotEmpty
         ? (switchValue ? scheduleList[1] : scheduleList[0])
         : [];
-    return scheduleList.isEmpty
+    return (scheduleList.isEmpty || cubitState.status != ResponseStatus.success)
         ? const Center(
             child: Text('Введите номер группы'),
           )
@@ -207,7 +220,7 @@ class LectureCardWidget extends StatelessWidget {
                 width: 10,
               ),
               Expanded(
-                flex:3,
+                flex: 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

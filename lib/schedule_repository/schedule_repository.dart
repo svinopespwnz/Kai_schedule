@@ -30,23 +30,31 @@ class ScheduleRepository {
       schedule.l6
     ];
     for (var day in list) {
-      for (var lesson in day) {
-        if (lesson.dayDate.contains('/')) {
-          evenList.add(lesson);
-          oddList.add(lesson);
-        } else if (lesson.dayDate.contains('неч')) {
-          oddList.add(lesson);
-        } else if (lesson.dayDate.contains('чет')) {
-          evenList.add(lesson);
-        } else {
-          evenList.add(lesson);
-          oddList.add(lesson);
+      if (day != null) {
+        for (var lesson in day) {
+          if (lesson.dayDate.contains('/')) {
+            evenList.add(lesson);
+            oddList.add(lesson);
+          } else if (lesson.dayDate.contains('неч')) {
+            oddList.add(lesson);
+          } else if (lesson.dayDate.contains('чет')) {
+            evenList.add(lesson);
+          } else {
+            evenList.add(lesson);
+            oddList.add(lesson);
+          }
         }
+        oddWeek.add([...oddList]);
+        evenWeek.add([...evenList]);
+        oddList.clear();
+        evenList.clear();
       }
-      oddWeek.add([...oddList]);
-      evenWeek.add([...evenList]);
-      oddList.clear();
-      evenList.clear();
+      else {
+        oddWeek.add([...[]]);
+        evenWeek.add([...[]]);
+        oddList.clear();
+        evenList.clear();
+      }
     }
     final scheduleList = [oddWeek, evenWeek];
     return scheduleList;

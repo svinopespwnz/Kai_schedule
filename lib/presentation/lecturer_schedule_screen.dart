@@ -14,7 +14,9 @@ class LecturerScheduleScreen extends StatefulWidget {
 }
 
 class _LecturerScheduleScreenState extends State<LecturerScheduleScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   late TabController _tabController;
 
   final tabs = const [
@@ -42,12 +44,14 @@ class _LecturerScheduleScreenState extends State<LecturerScheduleScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<LecturerScheduleCubit>();
     return BlocConsumer<LecturerScheduleCubit, LecturerScheduleState>(
       listener: (context, state) {
         if (state.status == ResponseStatus.failure) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Ошибка получения данных, попробуйте позже')));
+              content: Text(
+                  'Ошибка получения данных, попробуйте позже или проверьте интернет')));
         }
       },
       builder: (context, state) => Scaffold(
@@ -109,19 +113,21 @@ class BodyTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubitState = context.read<LecturerScheduleCubit>().state;
     final schedule = cubitState.data;
-    return cubitState.name.isEmpty
+    return (cubitState.name.isEmpty ||
+            cubitState.status == ResponseStatus.failure)
         ? const Center(
             child: Text('Введите имя преподавателя'),
           )
         : TabBarView(
             controller: _tabController,
-            children: List.generate(
-                6, (index) => LecturerDayScheduleWidget(data: schedule[index])));
+            children: List.generate(6,
+                (index) => LecturerDayScheduleWidget(data: schedule[index])));
   }
 }
 
 class LecturerDayScheduleWidget extends StatelessWidget {
-  const LecturerDayScheduleWidget({Key? key, required this.data}) : super(key: key);
+  const LecturerDayScheduleWidget({Key? key, required this.data})
+      : super(key: key);
   final List<LecturerLesson>? data;
 
   @override

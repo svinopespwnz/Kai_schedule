@@ -43,6 +43,13 @@ class RootScreen extends StatefulWidget {
 }
 
 class _RootScreenState extends State<RootScreen> {
+  late PageController _pageController;
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,17 +65,19 @@ class _RootScreenState extends State<RootScreen> {
           ],
           onTap: (index) {
             context.read<NavigationCubit>().getNavBarItem(index);
+            _pageController
+                .jumpToPage(context.read<NavigationCubit>().state.index);
           },
           selectedItemColor: Colors.black87,
           unselectedItemColor: Colors.grey,
-          selectedLabelStyle:
-              AppStyles.selectedLabelStyle,
+          selectedLabelStyle: AppStyles.selectedLabelStyle,
         );
       }),
       body: BlocBuilder<NavigationCubit, NavigationState>(
           builder: (context, state) {
-        return IndexedStack(
-          index: context.read<NavigationCubit>().state.index,
+        return PageView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: _pageController,
           children: [
             BlocProvider(
                 create: (context) =>

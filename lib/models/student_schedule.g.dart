@@ -7,33 +7,33 @@ part of 'student_schedule.dart';
 // **************************************************************************
 
 Schedule _$ScheduleFromJson(Map<String, dynamic> json) => Schedule(
-      l1: (json['1'] as List<dynamic>)
-          .map((e) => Lesson.fromJson(e as Map<String, dynamic>))
+      l1: (json['1'] as List<dynamic>?)
+          ?.map((e) => Lesson.fromJson(e as Map<String, dynamic>))
           .toList(),
-      l2: (json['2'] as List<dynamic>)
-          .map((e) => Lesson.fromJson(e as Map<String, dynamic>))
+      l2: (json['2'] as List<dynamic>?)
+          ?.map((e) => Lesson.fromJson(e as Map<String, dynamic>))
           .toList(),
-      l3: (json['3'] as List<dynamic>)
-          .map((e) => Lesson.fromJson(e as Map<String, dynamic>))
+      l3: (json['3'] as List<dynamic>?)
+          ?.map((e) => Lesson.fromJson(e as Map<String, dynamic>))
           .toList(),
-      l4: (json['4'] as List<dynamic>)
-          .map((e) => Lesson.fromJson(e as Map<String, dynamic>))
+      l4: (json['4'] as List<dynamic>?)
+          ?.map((e) => Lesson.fromJson(e as Map<String, dynamic>))
           .toList(),
-      l5: (json['5'] as List<dynamic>)
-          .map((e) => Lesson.fromJson(e as Map<String, dynamic>))
+      l5: (json['5'] as List<dynamic>?)
+          ?.map((e) => Lesson.fromJson(e as Map<String, dynamic>))
           .toList(),
-      l6: (json['6'] as List<dynamic>)
-          .map((e) => Lesson.fromJson(e as Map<String, dynamic>))
+      l6: (json['6'] as List<dynamic>?)
+          ?.map((e) => Lesson.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$ScheduleToJson(Schedule instance) => <String, dynamic>{
-      '1': instance.l1.map((e) => e.toJson()).toList(),
-      '2': instance.l2.map((e) => e.toJson()).toList(),
-      '3': instance.l3.map((e) => e.toJson()).toList(),
-      '4': instance.l4.map((e) => e.toJson()).toList(),
-      '5': instance.l5.map((e) => e.toJson()).toList(),
-      '6': instance.l6.map((e) => e.toJson()).toList(),
+      '1': instance.l1?.map((e) => e.toJson()).toList(),
+      '2': instance.l2?.map((e) => e.toJson()).toList(),
+      '3': instance.l3?.map((e) => e.toJson()).toList(),
+      '4': instance.l4?.map((e) => e.toJson()).toList(),
+      '5': instance.l5?.map((e) => e.toJson()).toList(),
+      '6': instance.l6?.map((e) => e.toJson()).toList(),
     };
 
 Lesson _$LessonFromJson(Map<String, dynamic> json) => Lesson(

@@ -1,1 +1,1 @@
-enum ResponseStatus { failure, success }
+enum ResponseStatus { failure, success, groupFailure }

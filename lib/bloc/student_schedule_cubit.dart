@@ -17,16 +17,35 @@ class StudentScheduleCubit extends Cubit<StudentScheduleState> {
   Future<void> getStudentScheduleByGroup(
     String group,
   ) async {
-    if (group.isEmpty) return;
-    if (state.group == group && state.isButton == false) return;
+    if (group.isEmpty) {
+      emit(state.copyWith(isButton: true));
+      return;
+    }
+    if (state.group == group &&
+        state.isButton == false &&
+        state.status == ResponseStatus.success) {
+      emit(state.copyWith(isButton: true));
+      return;
+    }
     try {
       emit(state.copyWith(group: group, isLoading: true, isButton: true));
       final schedule =
           await _scheduleRepository.getStudentScheduleByGroup(group: group);
-      emit(state.copyWith(data: schedule, isLoading: false));
+      emit(state.copyWith(
+          data: schedule,
+          isButton: true,
+          isLoading: false,
+          status: ResponseStatus.success));
       await setGroupToStorage(group);
     } on ApiClientException {
-      emit(state.copyWith(status: ResponseStatus.failure, isLoading: false));
+      emit(state.copyWith(
+          status: ResponseStatus.failure, isLoading: false, isButton: true));
+    } on GroupDoesntExistException {
+      emit(state.copyWith(
+          group: '',
+          status: ResponseStatus.groupFailure,
+          isLoading: false,
+          isButton: true));
     }
   }
 
