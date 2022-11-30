@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:kai_schedule/bloc/lecturer_schedule_cubit.dart';
 import 'package:kai_schedule/bloc/navigation_cubit.dart';
 import 'package:kai_schedule/bloc/navigation_state.dart';
@@ -8,9 +9,15 @@ import 'package:kai_schedule/presentation/lecturer_schedule_screen.dart';
 import 'package:kai_schedule/presentation/student_schedule_screen.dart';
 import 'package:kai_schedule/schedule_repository/schedule_repository.dart';
 import 'package:kai_schedule/utility/styles.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getTemporaryDirectory(),
+  );
   runApp(MyApp(scheduleRepository: ScheduleRepository()));
+  // await ApiClient().getScore();
 }
 
 class MyApp extends StatelessWidget {
@@ -65,8 +72,7 @@ class _RootScreenState extends State<RootScreen> {
           ],
           onTap: (index) {
             context.read<NavigationCubit>().getNavBarItem(index);
-            _pageController
-                .jumpToPage(context.read<NavigationCubit>().state.index);
+            _pageController.jumpToPage(index);
           },
           selectedItemColor: Colors.black87,
           unselectedItemColor: Colors.grey,
@@ -76,7 +82,7 @@ class _RootScreenState extends State<RootScreen> {
       body: BlocBuilder<NavigationCubit, NavigationState>(
           builder: (context, state) {
         return PageView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
           children: [
             BlocProvider(

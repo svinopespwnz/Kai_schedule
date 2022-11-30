@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -7,7 +8,7 @@ import 'package:kai_schedule/bloc/student_schedule_state.dart';
 import 'package:kai_schedule/models/student_schedule.dart';
 import 'package:kai_schedule/utility/styles.dart';
 
-class StudentScheduleScreen extends StatefulWidget  {
+class StudentScheduleScreen extends StatefulWidget {
   const StudentScheduleScreen({Key? key}) : super(key: key);
 
   @override
@@ -15,7 +16,9 @@ class StudentScheduleScreen extends StatefulWidget  {
 }
 
 class _StudentScheduleScreenState extends State<StudentScheduleScreen>
-    with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin<StudentScheduleScreen> {
+    with
+        SingleTickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin<StudentScheduleScreen> {
   @override
   bool get wantKeepAlive => true;
   late TabController _tabController;
@@ -38,9 +41,10 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
   void initState() {
     super.initState();
     final initialIndex = DateTime.now().weekday - 1;
-    _tabController =
-        TabController(length: 6, vsync: this, initialIndex: initialIndex);
-    context.read<StudentScheduleCubit>().checkIfGroupStored();
+    _tabController = initialIndex == 6
+        ? TabController(length: 6, vsync: this, initialIndex: 0)
+        : TabController(length: 6, vsync: this, initialIndex: initialIndex);
+
   }
 
   @override
@@ -173,6 +177,7 @@ class StudentDayScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return data.isEmpty
         ? const Center(
             child: Text('Нет занятий'),
@@ -199,7 +204,7 @@ class LectureCardWidget extends StatelessWidget {
         child: Card(
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             child: Row(children: [
               Expanded(
                 flex: 1,
@@ -228,18 +233,27 @@ class LectureCardWidget extends StatelessWidget {
                       data.disciplName,
                       style: AppStyles.disciplineNameTextStyle,
                     ),
+                    const SizedBox(
+                      height: 1.5,
+                    ),
                     Text(
                       data.disciplType,
                       style: AppStyles.disciplineTypeTextStyle,
+                    ),
+                    const SizedBox(
+                      height: 1.5,
                     ),
                     Text(
                       data.prepodName,
                       style: AppStyles.lecturerTextStyle,
                     ),
+                    const SizedBox(
+                      height: 1.5,
+                    ),
                     Text(
                       data.dayDate,
                       style: AppStyles.dayDateTextStyle,
-                    )
+                    ),
                   ],
                 ),
               ),

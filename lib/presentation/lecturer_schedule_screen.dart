@@ -37,8 +37,9 @@ class _LecturerScheduleScreenState extends State<LecturerScheduleScreen>
   void initState() {
     super.initState();
     final initialIndex = DateTime.now().weekday - 1;
-    _tabController =
-        TabController(length: 6, vsync: this, initialIndex: initialIndex);
+    _tabController = initialIndex == 6
+        ? TabController(length: 6, vsync: this, initialIndex: 0)
+        : TabController(length: 6, vsync: this, initialIndex: initialIndex);
     context.read<LecturerScheduleCubit>().fillLecturersList();
   }
 

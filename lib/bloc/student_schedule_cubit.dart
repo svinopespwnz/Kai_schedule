@@ -1,12 +1,13 @@
-import 'package:bloc/bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:kai_schedule/bloc/response_status_enum.dart';
 import 'package:kai_schedule/bloc/student_schedule_state.dart';
+import 'package:kai_schedule/models/student_schedule.dart';
 import 'package:kai_schedule/utility/exceptions.dart';
 import 'package:kai_schedule/utility/get_week_parity.dart' as week_parity;
-import 'package:shared_preferences/shared_preferences.dart';
 import '../schedule_repository/schedule_repository.dart';
 
-class StudentScheduleCubit extends Cubit<StudentScheduleState> {
+class StudentScheduleCubit extends Cubit<StudentScheduleState>
+    with HydratedMixin {
   final ScheduleRepository _scheduleRepository;
   StudentScheduleCubit(this._scheduleRepository)
       : super(StudentScheduleState(
@@ -36,7 +37,7 @@ class StudentScheduleCubit extends Cubit<StudentScheduleState> {
           isButton: true,
           isLoading: false,
           status: ResponseStatus.success));
-      await setGroupToStorage(group);
+      //await setGroupToStorage(group);
     } on ApiClientException {
       emit(state.copyWith(
           status: ResponseStatus.failure, isLoading: false, isButton: true));
@@ -56,20 +57,28 @@ class StudentScheduleCubit extends Cubit<StudentScheduleState> {
   void toggleSwitch(bool value) {
     emit(state.copyWith(switchValue: value));
   }
-
-  Future<void> setGroupToStorage(String group) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('group', group);
+  @override
+  StudentScheduleState? fromJson(Map<String, dynamic> json) {
+    try {
+      final data = List<List<List<Lesson>>>.from(json['data'].map((e) =>
+          List<List<Lesson>>.from(e.map(
+              (e) => List<Lesson>.from(e.map((e) => Lesson.fromJson(e)))))));
+      return StudentScheduleState(
+          group: json['group'],
+          data: data,
+          isButton: true,
+          isWeekEven: week_parity.isEven(),
+          switchValue: week_parity.isEven());
+    } catch (_) {
+      return StudentScheduleState(group: '1810');
+    }
   }
 
-  void checkIfGroupStored() async {
-    final prefs = await SharedPreferences.getInstance();
-    final group = prefs.getString('group');
-    if (group == null) return;
-    emit(state.copyWith(
-      group: group,
-      isButton: true,
-    ));
-    await getStudentScheduleByGroup(group);
+  @override
+  Map<String, dynamic>? toJson(StudentScheduleState state) {
+    final map = state.data.isNotEmpty
+        ? {'group': state.group, 'data': state.data}
+        : null;
+    return map;
   }
 }
