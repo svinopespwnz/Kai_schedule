@@ -11,6 +11,9 @@ class NavigationCubit extends Cubit<NavigationState> {
       case 1:
         emit(NavigationState(index: index));
         break;
+      case 2:
+        emit(NavigationState(index: index));
+        break;
     }
   }
 }

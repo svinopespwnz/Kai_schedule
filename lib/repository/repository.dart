@@ -1,22 +1,28 @@
-import 'package:kai_schedule/api/api_client.dart';
+import 'package:kai_schedule/api/kai_api_client.dart';
 import 'package:kai_schedule/models/lecturer_schedule.dart';
 import 'package:kai_schedule/models/student_schedule.dart';
+import 'package:kai_schedule/models/wall_post.dart';
 
-class ScheduleRepository {
-  final ApiClient _apiClient;
-  ScheduleRepository({ApiClient? apiClient})
-      : _apiClient = apiClient ?? ApiClient();
-  Future<bool> isEven() async {
-    var d0 = DateTime.now().millisecondsSinceEpoch;
-    var d = DateTime(DateTime.now().year, 1, 1);
-    var d1 = d.millisecondsSinceEpoch;
-    var re = (((d0 - d1) / 8.64e7) + (6)).floor();
-    return ((re / 7).floor() % 2 == 0) ? true : false;
-  }
+import '../api/vk_api_client.dart';
+
+class ApiRepository {
+  final KaiApiClient _kaiApiClient;
+  final VkApiClient _vkApiClient;
+  ApiRepository({KaiApiClient? apiClient, VkApiClient? vkApiClient})
+      : _kaiApiClient = apiClient ?? KaiApiClient(),
+        _vkApiClient = vkApiClient ?? VkApiClient();
+  // Future<bool> isEven() async {
+  //   var d0 = DateTime.now().millisecondsSinceEpoch;
+  //   var d = DateTime(DateTime.now().year, 1, 1);
+  //   var d1 = d.millisecondsSinceEpoch;
+  //   var re = (((d0 - d1) / 8.64e7) + (6)).floor();
+  //   return ((re / 7).floor() % 2 == 0) ? true : false;
+  // }
 
   Future<List<List<List<Lesson>>>> getStudentScheduleByGroup(
       {required String group}) async {
-    final schedule = await _apiClient.fetchStudentScheduleByGroup(group: group);
+    final schedule =
+        await _kaiApiClient.fetchStudentScheduleByGroup(group: group);
     final List<Lesson> evenList = [];
     final List<Lesson> oddList = [];
     final List<List<Lesson>> oddWeek = [];
@@ -48,8 +54,7 @@ class ScheduleRepository {
         evenWeek.add([...evenList]);
         oddList.clear();
         evenList.clear();
-      }
-      else {
+      } else {
         oddWeek.add([...[]]);
         evenWeek.add([...[]]);
         oddList.clear();
@@ -61,12 +66,12 @@ class ScheduleRepository {
   }
 
   Future<List<String>> getLecturersNamesList() async {
-    final listOfLecturer = await _apiClient.fetchLecturersNamesList();
+    final listOfLecturer = await _kaiApiClient.fetchLecturersNamesList();
     return listOfLecturer;
   }
 
   Future<List<List<LecturerLesson>?>> getLecturerSchedule(String name) async {
-    final schedule = await _apiClient.fetchLecturerSchedule(name);
+    final schedule = await _kaiApiClient.fetchLecturerSchedule(name);
     final list = [
       schedule.l1,
       schedule.l2,
@@ -100,5 +105,9 @@ class ScheduleRepository {
       }
     }
     return scheduleList;
+  }
+  Future<WallPost> getWall()async{
+    final wall= await _vkApiClient.getWall();
+return wall;
   }
 }

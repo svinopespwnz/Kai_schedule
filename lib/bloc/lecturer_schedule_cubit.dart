@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:kai_schedule/bloc/lecturer_schedule_state.dart';
 import 'package:kai_schedule/bloc/response_status_enum.dart';
-import 'package:kai_schedule/schedule_repository/schedule_repository.dart';
+import 'package:kai_schedule/repository/repository.dart';
 import 'package:kai_schedule/utility/exceptions.dart';
 import 'package:kai_schedule/utility/get_week_parity.dart' as week_parity;
 
 class LecturerScheduleCubit extends Cubit<LecturerScheduleState> {
-  final ScheduleRepository _scheduleRepository;
+  final ApiRepository _scheduleRepository;
   LecturerScheduleCubit(this._scheduleRepository)
       : super(LecturerScheduleState(
           isWeekEven: week_parity.isEven(),

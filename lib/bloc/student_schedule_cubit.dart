@@ -4,11 +4,11 @@ import 'package:kai_schedule/bloc/student_schedule_state.dart';
 import 'package:kai_schedule/models/student_schedule.dart';
 import 'package:kai_schedule/utility/exceptions.dart';
 import 'package:kai_schedule/utility/get_week_parity.dart' as week_parity;
-import '../schedule_repository/schedule_repository.dart';
+import '../repository/repository.dart';
 
 class StudentScheduleCubit extends Cubit<StudentScheduleState>
     with HydratedMixin {
-  final ScheduleRepository _scheduleRepository;
+  final ApiRepository _scheduleRepository;
   StudentScheduleCubit(this._scheduleRepository)
       : super(StudentScheduleState(
           isButton: true,
