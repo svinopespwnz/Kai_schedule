@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:kai_schedule/api/vk_api_client.dart';
-import 'package:kai_schedule/bloc/kai_vk_news_cubit.dart';
+import 'package:kai_schedule/bloc/kai_vk_news_bloc.dart';
+import 'package:kai_schedule/bloc/kai_vk_news_events.dart';
 import 'package:kai_schedule/bloc/lecturer_schedule_cubit.dart';
 import 'package:kai_schedule/bloc/navigation_cubit.dart';
 import 'package:kai_schedule/bloc/navigation_state.dart';
@@ -20,7 +20,6 @@ void main() async {
     storageDirectory: await getTemporaryDirectory(),
   );
   runApp(MyApp(scheduleRepository: ApiRepository()));
-  await VkApiClient().getWall();
 }
 
 class MyApp extends StatelessWidget {
@@ -100,7 +99,7 @@ class _RootScreenState extends State<RootScreen> {
                 child: const LecturerScheduleScreen()),
             BlocProvider(
               create: (context) =>
-                  KaiVkNewsCubit(context.read<ApiRepository>()),
+                  KaiVkNewsBloc(context.read<ApiRepository>())..add(PostFetched()),
               child: const NewsScreen(),
             ),
           ],

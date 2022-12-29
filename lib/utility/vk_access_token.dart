@@ -1,0 +1,2 @@
+const vktoken =
+    'vk1.a.vO6PWWZISpCPCTYCqj-6KadlrsslcBz61HEKPhzlsA2mb2NjyEr-ODZ9TUMeLt3bHA8dzkJCD8xy9QecKV4OHg9z9EXwFGyhi6rO18NBCgAdtRUtpR54EAjWBr2KThc_MNh8hApmMVd28nMCgfBLyghR9OEscZ2KQgjhqen7QtIn_mRZyiHDrclHgGwV6aVp_az70uwrPN6OVlDKffM2xQ';

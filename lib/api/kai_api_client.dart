@@ -21,7 +21,7 @@ class KaiApiClient {
           .replace(queryParameters: queryParamsForGroupId);
 
       final groupIdResponse =
-          await http.get(urlGroupId).timeout(Duration(seconds: 12));
+          await http.get(urlGroupId).timeout(const Duration(seconds: 12));
 
       if (groupIdResponse.statusCode == 200) {
         final json = jsonDecode(groupIdResponse.body);
@@ -37,8 +37,9 @@ class KaiApiClient {
         final urlGroupSchedule = Uri.parse('https://kai.ru/raspisanie')
             .replace(queryParameters: queryParamsForSchedule);
 
-        final groupScheduleResponse =
-            await http.get(urlGroupSchedule).timeout(Duration(seconds: 12));
+        final groupScheduleResponse = await http
+            .get(urlGroupSchedule)
+            .timeout(const Duration(seconds: 12));
         if (groupScheduleResponse.statusCode == 200) {
           final json = (jsonDecode(groupScheduleResponse.body));
           return Schedule.fromJson(json);
@@ -66,7 +67,7 @@ class KaiApiClient {
       final url = Uri.parse("https://kai.ru/for-staff/raspisanie")
           .replace(queryParameters: params);
 
-      final response = await http.get(url).timeout(Duration(seconds: 12));
+      final response = await http.get(url).timeout(const Duration(seconds: 12));
       if (response.statusCode == 200) {
         try {
           final lecturers = jsonDecode(response.body) as List;
@@ -107,7 +108,7 @@ class KaiApiClient {
       };
       final url = Uri.parse("https://kai.ru/for-staff/raspisanie")
           .replace(queryParameters: params);
-      final response = await http.get(url).timeout(Duration(seconds: 12));
+      final response = await http.get(url).timeout(const Duration(seconds: 12));
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         return LecturerSchedule.fromJson(json);
@@ -157,7 +158,7 @@ class KaiApiClient {
   //
   //   final qp2 = {
   //     'p_p_id': '58',
-  //     'p_p_lifecycle': '1',
+  //     'p_p_lifecycle': '0',
   //     'p_p_state': 'maximized',
   //     'p_p_mode': 'view',
   //     '_58_struts_action': '/login/login',
@@ -169,14 +170,17 @@ class KaiApiClient {
   //     '_58_password': 'efjm6zud'
   //   };
   //   final url4 = Uri.parse(
-  //           'https://kai.ru/main?p_p_id=58&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&saveLastPath=false&_58_struts_action=%2Flogin%2Flogin&_58_formDate=1668698405169&_58_saveLastPath=false&_58_redirect=&_58_doActionAfterLogin=false&_58_login=pantsyrevri&_58_password=efjm6zud');
-  //     //  .replace(queryParameters: qp2);
+  //       'https://kai.ru/main?p_p_id=58&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&saveLastPath=false&_58_struts_action=%2Flogin%2Flogin&_58_formDate=1668698405169&_58_saveLastPath=false&_58_redirect=&_58_doActionAfterLogin=false&_58_login=pantsyrevri&_58_password=efjm6zud');
+  //   //  .replace(queryParameters: qp2);
   //   final response4 = await http.post(url4);
-  //   final a= response4.body;
-  //   final cookiesend = response4.headers[
-  //   'set-cookie']!.indexOf('; ');
-  //   final cookief=response4.headers[
-  //   'set-cookie']!.substring(0,cookiesend);
+  //   final a = response4.body;
+  //
+  //   final cookiesend = response4.headers['set-cookie']!.indexOf('; ');
+  //   final cookief = response4.headers['set-cookie']!.substring(0, cookiesend);
+  //   final url5 = Uri.parse('https://kai.ru/main').replace(queryParameters: qp2);
+  //   final response5 = await http.post(url5,headers: {"Cookie":cookief});
+  //   final cookies = response5.headers['set-cookie'];
+  //   final bod=response5.body;
   //   return cookief;
   // }
   //

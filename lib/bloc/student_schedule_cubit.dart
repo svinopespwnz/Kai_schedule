@@ -37,7 +37,6 @@ class StudentScheduleCubit extends Cubit<StudentScheduleState>
           isButton: true,
           isLoading: false,
           status: ResponseStatus.success));
-      //await setGroupToStorage(group);
     } on ApiClientException {
       emit(state.copyWith(
           status: ResponseStatus.failure, isLoading: false, isButton: true));
@@ -50,6 +49,28 @@ class StudentScheduleCubit extends Cubit<StudentScheduleState>
     }
   }
 
+  Future<void> didScheduleUpdate() async {
+    if (state.group.isNotEmpty) {
+      try {
+        emit(state.copyWith(isLoading: true, isButton: true));
+        final schedule = await _scheduleRepository.getStudentScheduleByGroup(
+            group: state.group);
+        if (state.data == schedule) {
+          return;
+        } else {
+          emit(state.copyWith(
+              data: schedule,
+              isButton: true,
+              isLoading: false,
+              status: ResponseStatus.success));
+        }
+      } on ApiClientException {
+        emit(state.copyWith(
+            status: ResponseStatus.failure, isLoading: false, isButton: true));
+      }
+    }
+  }
+
   void toggleTextField(bool isButton) {
     emit(state.copyWith(isButton: !isButton));
   }
@@ -57,6 +78,7 @@ class StudentScheduleCubit extends Cubit<StudentScheduleState>
   void toggleSwitch(bool value) {
     emit(state.copyWith(switchValue: value));
   }
+
   @override
   StudentScheduleState? fromJson(Map<String, dynamic> json) {
     try {

@@ -106,8 +106,8 @@ class ApiRepository {
     }
     return scheduleList;
   }
-  Future<WallPost> getWall()async{
-    final wall= await _vkApiClient.getWall();
+  Future<WallPost> getWall([int startIndex=0])async{
+    final wall= await _vkApiClient.getWall(startIndex);
 return wall;
   }
 }

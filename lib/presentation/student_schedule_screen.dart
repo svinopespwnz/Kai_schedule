@@ -44,6 +44,7 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
     _tabController = initialIndex == 6
         ? TabController(length: 6, vsync: this, initialIndex: 0)
         : TabController(length: 6, vsync: this, initialIndex: initialIndex);
+    context.read<StudentScheduleCubit>().didScheduleUpdate();
 
   }
 
@@ -65,10 +66,11 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
       listenWhen: (previous, current) {
         if ((current.status == ResponseStatus.failure ||
                 current.status == ResponseStatus.groupFailure) &&
-            current.isLoading == false)
+            current.isLoading == false) {
           return (current.isButton == true);
-        else
+        } else {
           return false;
+        }
       },
       builder: (context, state) => Scaffold(
         backgroundColor: AppStyles.backgroundColor,
