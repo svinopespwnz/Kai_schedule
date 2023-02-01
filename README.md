@@ -1,16 +1,11 @@
 # kai_schedule
 
-A new Flutter project.
+A mobile app for students of KNRTU-KAI to make their daily routine simpler
 
-## Getting Started
+## Reason
 
-This project is a starting point for a Flutter application.
+The app might be considered as `kai.ru` wrapper. Official mobile-unfriendly ugly inconvenient website had to be replaced by something usable. Here the Kai_schedule comes in.
 
-A few resources to get you started if this is your first Flutter project:
+## Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The application is designed based on the BLoC architecture. Therefore, the main packages are bloc and flutter_bloc, as well as hydrated_bloc to save the last state in the cache.
