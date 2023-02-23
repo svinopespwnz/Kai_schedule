@@ -22,13 +22,6 @@ class KaiVkNewsBloc extends Bloc<PostEvent, KaiVkNewsState> {
       PostFetched event, Emitter<KaiVkNewsState> emit) async {
     if (state.hasReachedMax) return;
     try {
-      if (state.status == PostStatus.init) {
-        final posts = await _apiRepository.getWall();
-        return emit(state.copyWith(
-            status: PostStatus.success,
-            hasReachedMax: false,
-            data: posts.response?.items));
-      }
       final wall = await _apiRepository.getWall(state.data.length);
       final posts = wall.response?.items;
       emit(posts!.isEmpty
@@ -38,7 +31,7 @@ class KaiVkNewsBloc extends Bloc<PostEvent, KaiVkNewsState> {
               hasReachedMax: false,
               data: List.of(state.data)..addAll(posts)));
     } catch (_) {
-      state.copyWith(status: PostStatus.failure);
+      emit(state.copyWith(status: PostStatus.failure));
     }
   }
 }

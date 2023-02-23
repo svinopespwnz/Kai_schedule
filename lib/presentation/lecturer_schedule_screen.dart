@@ -56,15 +56,13 @@ class _LecturerScheduleScreenState extends State<LecturerScheduleScreen>
         }
       },
       builder: (context, state) => Scaffold(
-        backgroundColor: AppStyles.backgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('Преподаватель: '),
+                const Text('Преподаватель:'),
                 Text(cubit.state.isWeekEven ? 'Четная' : 'Нечетная')
               ]),
               Expanded(
@@ -88,7 +86,6 @@ class _LecturerScheduleScreenState extends State<LecturerScheduleScreen>
             ],
           ),
           bottom: TabBar(
-            labelColor: Colors.black87,
             tabs: tabs,
             controller: _tabController,
           ),

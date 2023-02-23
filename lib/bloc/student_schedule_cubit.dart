@@ -29,10 +29,11 @@ class StudentScheduleCubit extends Cubit<StudentScheduleState>
       return;
     }
     try {
-      emit(state.copyWith(group: group, isLoading: true, isButton: true));
+      emit(state.copyWith(isLoading: true, isButton: true));
       final schedule =
           await _scheduleRepository.getStudentScheduleByGroup(group: group);
       emit(state.copyWith(
+          group: group,
           data: schedule,
           isButton: true,
           isLoading: false,
@@ -42,7 +43,6 @@ class StudentScheduleCubit extends Cubit<StudentScheduleState>
           status: ResponseStatus.failure, isLoading: false, isButton: true));
     } on GroupDoesntExistException {
       emit(state.copyWith(
-          group: '',
           status: ResponseStatus.groupFailure,
           isLoading: false,
           isButton: true));
@@ -55,15 +55,12 @@ class StudentScheduleCubit extends Cubit<StudentScheduleState>
         emit(state.copyWith(isLoading: true, isButton: true));
         final schedule = await _scheduleRepository.getStudentScheduleByGroup(
             group: state.group);
-        if (state.data == schedule) {
-          return;
-        } else {
-          emit(state.copyWith(
-              data: schedule,
-              isButton: true,
-              isLoading: false,
-              status: ResponseStatus.success));
-        }
+
+        emit(state.copyWith(
+            data: schedule,
+            isButton: true,
+            isLoading: false,
+            status: ResponseStatus.success));
       } on ApiClientException {
         emit(state.copyWith(
             status: ResponseStatus.failure, isLoading: false, isButton: true));

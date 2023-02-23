@@ -50,10 +50,13 @@ class _NewsScreenState extends State<NewsScreen> {
       switch (state.status) {
         case PostStatus.failure:
           return const Center(child: Text('Ошибка получения данных'));
+        case PostStatus.init:
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         case PostStatus.success:
           return Scaffold(
               appBar: AppBar(
-                backgroundColor: Colors.white,
                 title: const Text('Новости'),
                 centerTitle: true,
               ),
@@ -73,15 +76,14 @@ class _NewsScreenState extends State<NewsScreen> {
 
                         return index >= state.data.length
                             ? const BottomLoader()
-                            : PostListItem(
-                                post: state.data[index],
-                                itemCount: itemCount,
-                              );
+                            : itemCount == 0 && state.data[index].text == ""
+                                ? const SizedBox.shrink()
+                                : PostListItem(
+                                    post: state.data[index],
+                                    itemCount: itemCount,
+                                  );
                       }));
-        case PostStatus.init:
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+
       }
     });
   }
@@ -91,7 +93,7 @@ class PostListItem extends StatefulWidget {
   final Items post;
   final int itemCount;
 
-   const PostListItem({required this.post, required this.itemCount, Key? key})
+  const PostListItem({required this.post, required this.itemCount, Key? key})
       : super(key: key);
 
   @override
@@ -144,13 +146,15 @@ class _PostListItemState extends State<PostListItem> {
           if (widget.post.attachments != null && widget.itemCount > 1)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: widget.post.attachments!.where((element) => element.type=='photo').map((photo) {
+              children: widget.post.attachments!
+                  .where((element) => element.type == 'photo')
+                  .map((photo) {
                 int dotIndex = widget.post.attachments!.indexOf(photo);
                 return Container(
                   width: 10.0,
                   height: 10.0,
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 2.0),
+                  margin:
+                      const EdgeInsets.only(top: 8.0, right: 2.0, left: 2.0),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: _currentImageIndex == dotIndex
@@ -161,7 +165,7 @@ class _PostListItemState extends State<PostListItem> {
               }).toList(),
             ),
           Padding(
-            padding: const EdgeInsets.only(left: 8.0,right: 8.0, bottom: 8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(widget.post.text ?? ''),
           ),
         ],

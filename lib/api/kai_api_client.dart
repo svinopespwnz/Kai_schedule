@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:kai_schedule/models/lecturer_schedule.dart';
 import 'package:kai_schedule/models/student_schedule.dart';
 import 'package:kai_schedule/utility/exceptions.dart';
-import 'package:html/parser.dart' show parse;
 
 class KaiApiClient {
   Future<Schedule> fetchStudentScheduleByGroup({required String group}) async {

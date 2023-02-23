@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'KAI Schedule',
-        theme:
-            ThemeData(primaryColor: Colors.black, primarySwatch: Colors.grey),
+        theme: AppStyles.light,
+        darkTheme: AppStyles.dark,
         home: BlocProvider(
             create: (context) => NavigationCubit(), child: const RootScreen()),
       ),
@@ -78,8 +78,7 @@ class _RootScreenState extends State<RootScreen> {
             context.read<NavigationCubit>().getNavBarItem(index);
             _pageController.jumpToPage(index);
           },
-          selectedItemColor: Colors.black87,
-          unselectedItemColor: Colors.grey,
+
           selectedLabelStyle: AppStyles.selectedLabelStyle,
         );
       }),
@@ -98,8 +97,8 @@ class _RootScreenState extends State<RootScreen> {
                     LecturerScheduleCubit(context.read<ApiRepository>()),
                 child: const LecturerScheduleScreen()),
             BlocProvider(
-              create: (context) =>
-                  KaiVkNewsBloc(context.read<ApiRepository>())..add(PostFetched()),
+              create: (context) => KaiVkNewsBloc(context.read<ApiRepository>())
+                ..add(PostFetched()),
               child: const NewsScreen(),
             ),
           ],

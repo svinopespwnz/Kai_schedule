@@ -18,7 +18,7 @@ class VkApiClient {
       };
       final vkUrl = Uri.parse('https://api.vk.com/method/wall.get')
           .replace(queryParameters: queryParams);
-      final vkResponse = await http.get(vkUrl);
+      final vkResponse = await http.get(vkUrl).timeout(const Duration(seconds: 12));
       final json = jsonDecode(vkResponse.body);
       return WallPost.fromJson(json);
     } on SocketException {

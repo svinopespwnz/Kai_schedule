@@ -5,14 +5,14 @@ class WallPost {
 
   WallPost.fromJson(Map<String, dynamic> json) {
     response = json['response'] != null
-        ? new Response.fromJson(json['response'])
+        ?  Response.fromJson(json['response'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.response != null) {
-      data['response'] = this.response!.toJson();
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    if (response != null) {
+      data['response'] = response!.toJson();
     }
     return data;
   }
@@ -29,16 +29,16 @@ class Response {
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
-        items!.add(new Items.fromJson(v));
+        items!.add(Items.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['count'] = this.count;
-    if (this.items != null) {
-      data['items'] = this.items!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['count'] = count;
+    if (items != null) {
+      data['items'] = items!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -103,67 +103,67 @@ class Items {
     if (json['attachments'] != null) {
       attachments = <Attachments>[];
       json['attachments'].forEach((v) {
-        attachments!.add(new Attachments.fromJson(v));
+        attachments!.add(Attachments.fromJson(v));
       });
     }
     postSource = json['post_source'] != null
-        ? new PostSource.fromJson(json['post_source'])
+        ? PostSource.fromJson(json['post_source'])
         : null;
     comments = json['comments'] != null
-        ? new Comments.fromJson(json['comments'])
+        ? Comments.fromJson(json['comments'])
         : null;
-    likes = json['likes'] != null ? new Likes.fromJson(json['likes']) : null;
+    likes = json['likes'] != null ? Likes.fromJson(json['likes']) : null;
     reposts =
-    json['reposts'] != null ? new Reposts.fromJson(json['reposts']) : null;
-    views = json['views'] != null ? new Views.fromJson(json['views']) : null;
-    donut = json['donut'] != null ? new Donut.fromJson(json['donut']) : null;
+    json['reposts'] != null ? Reposts.fromJson(json['reposts']) : null;
+    views = json['views'] != null ? Views.fromJson(json['views']) : null;
+    donut = json['donut'] != null ? Donut.fromJson(json['donut']) : null;
     shortTextRate = json['short_text_rate'];
     carouselOffset = json['carousel_offset'];
     hash = json['hash'];
     edited = json['edited'];
     copyright = json['copyright'] != null
-        ? new Copyright.fromJson(json['copyright'])
+        ? Copyright.fromJson(json['copyright'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['from_id'] = this.fromId;
-    data['owner_id'] = this.ownerId;
-    data['date'] = this.date;
-    data['marked_as_ads'] = this.markedAsAds;
-    data['is_favorite'] = this.isFavorite;
-    data['post_type'] = this.postType;
-    data['text'] = this.text;
-    data['is_pinned'] = this.isPinned;
-    if (this.attachments != null) {
-      data['attachments'] = this.attachments!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['from_id'] = fromId;
+    data['owner_id'] = ownerId;
+    data['date'] = date;
+    data['marked_as_ads'] = markedAsAds;
+    data['is_favorite'] = isFavorite;
+    data['post_type'] = postType;
+    data['text'] = text;
+    data['is_pinned'] = isPinned;
+    if (attachments != null) {
+      data['attachments'] = attachments!.map((v) => v.toJson()).toList();
     }
-    if (this.postSource != null) {
-      data['post_source'] = this.postSource!.toJson();
+    if (postSource != null) {
+      data['post_source'] = postSource!.toJson();
     }
-    if (this.comments != null) {
-      data['comments'] = this.comments!.toJson();
+    if (comments != null) {
+      data['comments'] = comments!.toJson();
     }
-    if (this.likes != null) {
-      data['likes'] = this.likes!.toJson();
+    if (likes != null) {
+      data['likes'] = likes!.toJson();
     }
-    if (this.reposts != null) {
-      data['reposts'] = this.reposts!.toJson();
+    if (reposts != null) {
+      data['reposts'] = reposts!.toJson();
     }
-    if (this.views != null) {
-      data['views'] = this.views!.toJson();
+    if (views != null) {
+      data['views'] = views!.toJson();
     }
-    if (this.donut != null) {
-      data['donut'] = this.donut!.toJson();
+    if (donut != null) {
+      data['donut'] = donut!.toJson();
     }
-    data['short_text_rate'] = this.shortTextRate;
-    data['carousel_offset'] = this.carouselOffset;
-    data['hash'] = this.hash;
-    data['edited'] = this.edited;
-    if (this.copyright != null) {
-      data['copyright'] = this.copyright!.toJson();
+    data['short_text_rate'] = shortTextRate;
+    data['carousel_offset'] = carouselOffset;
+    data['hash'] = hash;
+    data['edited'] = edited;
+    if (copyright != null) {
+      data['copyright'] = copyright!.toJson();
     }
     return data;
   }
@@ -180,26 +180,26 @@ class Attachments {
 
   Attachments.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    photo = json['photo'] != null ? new Photo.fromJson(json['photo']) : null;
-    doc = json['doc'] != null ? new Doc.fromJson(json['doc']) : null;
-    album = json['album'] != null ? new Album.fromJson(json['album']) : null;
-    video = json['video'] != null ? new Video.fromJson(json['video']) : null;
+    photo = json['photo'] != null ? Photo.fromJson(json['photo']) : null;
+    doc = json['doc'] != null ? Doc.fromJson(json['doc']) : null;
+    album = json['album'] != null ? Album.fromJson(json['album']) : null;
+    video = json['video'] != null ? Video.fromJson(json['video']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    if (this.photo != null) {
-      data['photo'] = this.photo!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    if (photo != null) {
+      data['photo'] = photo!.toJson();
     }
-    if (this.doc != null) {
-      data['doc'] = this.doc!.toJson();
+    if (doc != null) {
+      data['doc'] = doc!.toJson();
     }
-    if (this.album != null) {
-      data['album'] = this.album!.toJson();
+    if (album != null) {
+      data['album'] = album!.toJson();
     }
-    if (this.video != null) {
-      data['video'] = this.video!.toJson();
+    if (video != null) {
+      data['video'] = video!.toJson();
     }
     return data;
   }
@@ -238,7 +238,7 @@ class Photo {
     if (json['sizes'] != null) {
       sizes = <Sizes>[];
       json['sizes'].forEach((v) {
-        sizes!.add(new Sizes.fromJson(v));
+        sizes!.add(Sizes.fromJson(v));
       });
     }
     text = json['text'];
@@ -248,19 +248,19 @@ class Photo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['album_id'] = this.albumId;
-    data['date'] = this.date;
-    data['id'] = this.id;
-    data['owner_id'] = this.ownerId;
-    data['access_key'] = this.accessKey;
-    if (this.sizes != null) {
-      data['sizes'] = this.sizes!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['album_id'] = albumId;
+    data['date'] = date;
+    data['id'] = id;
+    data['owner_id'] = ownerId;
+    data['access_key'] = accessKey;
+    if (sizes != null) {
+      data['sizes'] = sizes!.map((v) => v.toJson()).toList();
     }
-    data['text'] = this.text;
-    data['user_id'] = this.userId;
-    data['has_tags'] = this.hasTags;
-    data['post_id'] = this.postId;
+    data['text'] = text;
+    data['user_id'] = userId;
+    data['has_tags'] = hasTags;
+    data['post_id'] = postId;
     return data;
   }
 }
@@ -281,11 +281,11 @@ class Sizes {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['height'] = this.height;
-    data['type'] = this.type;
-    data['width'] = this.width;
-    data['url'] = this.url;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['height'] = height;
+    data['type'] = type;
+    data['width'] = width;
+    data['url'] = url;
     return data;
   }
 }
@@ -325,16 +325,16 @@ class Doc {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['owner_id'] = this.ownerId;
-    data['title'] = this.title;
-    data['size'] = this.size;
-    data['ext'] = this.ext;
-    data['date'] = this.date;
-    data['type'] = this.type;
-    data['url'] = this.url;
-    data['access_key'] = this.accessKey;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['owner_id'] = ownerId;
+    data['title'] = title;
+    data['size'] = size;
+    data['ext'] = ext;
+    data['date'] = date;
+    data['type'] = type;
+    data['url'] = url;
+    data['access_key'] = accessKey;
     return data;
   }
 }
@@ -367,20 +367,20 @@ class Album {
     title = json['title'];
     updated = json['updated'];
     description = json['description'];
-    thumb = json['thumb'] != null ? new Thumb.fromJson(json['thumb']) : null;
+    thumb = json['thumb'] != null ? Thumb.fromJson(json['thumb']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['created'] = this.created;
-    data['id'] = this.id;
-    data['owner_id'] = this.ownerId;
-    data['size'] = this.size;
-    data['title'] = this.title;
-    data['updated'] = this.updated;
-    data['description'] = this.description;
-    if (this.thumb != null) {
-      data['thumb'] = this.thumb!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['created'] = created;
+    data['id'] = id;
+    data['owner_id'] = ownerId;
+    data['size'] = size;
+    data['title'] = title;
+    data['updated'] = updated;
+    data['description'] = description;
+    if (thumb != null) {
+      data['thumb'] = thumb!.toJson();
     }
     return data;
   }
@@ -417,7 +417,7 @@ class Thumb {
     if (json['sizes'] != null) {
       sizes = <Sizes>[];
       json['sizes'].forEach((v) {
-        sizes!.add(new Sizes.fromJson(v));
+        sizes!.add(Sizes.fromJson(v));
       });
     }
     text = json['text'];
@@ -426,18 +426,18 @@ class Thumb {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['album_id'] = this.albumId;
-    data['date'] = this.date;
-    data['id'] = this.id;
-    data['owner_id'] = this.ownerId;
-    data['access_key'] = this.accessKey;
-    if (this.sizes != null) {
-      data['sizes'] = this.sizes!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['album_id'] = albumId;
+    data['date'] = date;
+    data['id'] = id;
+    data['owner_id'] = ownerId;
+    data['access_key'] = accessKey;
+    if (sizes != null) {
+      data['sizes'] = sizes!.map((v) => v.toJson()).toList();
     }
-    data['text'] = this.text;
-    data['user_id'] = this.userId;
-    data['has_tags'] = this.hasTags;
+    data['text'] = text;
+    data['user_id'] = userId;
+    data['has_tags'] = hasTags;
     return data;
   }
 }
@@ -507,13 +507,13 @@ class Video {
     if (json['image'] != null) {
       image = <Image>[];
       json['image'].forEach((v) {
-        image!.add(new Image.fromJson(v));
+        image!.add(Image.fromJson(v));
       });
     }
     if (json['first_frame'] != null) {
       firstFrame = <FirstFrame>[];
       json['first_frame'].forEach((v) {
-        firstFrame!.add(new FirstFrame.fromJson(v));
+        firstFrame!.add(FirstFrame.fromJson(v));
       });
     }
     width = json['width'];
@@ -529,34 +529,34 @@ class Video {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['access_key'] = this.accessKey;
-    data['can_comment'] = this.canComment;
-    data['can_like'] = this.canLike;
-    data['can_repost'] = this.canRepost;
-    data['can_subscribe'] = this.canSubscribe;
-    data['can_add_to_faves'] = this.canAddToFaves;
-    data['can_add'] = this.canAdd;
-    data['comments'] = this.comments;
-    data['date'] = this.date;
-    data['description'] = this.description;
-    data['duration'] = this.duration;
-    if (this.image != null) {
-      data['image'] = this.image!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['access_key'] = accessKey;
+    data['can_comment'] = canComment;
+    data['can_like'] = canLike;
+    data['can_repost'] = canRepost;
+    data['can_subscribe'] = canSubscribe;
+    data['can_add_to_faves'] = canAddToFaves;
+    data['can_add'] = canAdd;
+    data['comments'] = comments;
+    data['date'] = date;
+    data['description'] = description;
+    data['duration'] = duration;
+    if (image != null) {
+      data['image'] = image!.map((v) => v.toJson()).toList();
     }
-    if (this.firstFrame != null) {
-      data['first_frame'] = this.firstFrame!.map((v) => v.toJson()).toList();
+    if (firstFrame != null) {
+      data['first_frame'] = firstFrame!.map((v) => v.toJson()).toList();
     }
-    data['width'] = this.width;
-    data['height'] = this.height;
-    data['id'] = this.id;
-    data['owner_id'] = this.ownerId;
-    data['title'] = this.title;
-    data['is_favorite'] = this.isFavorite;
-    data['track_code'] = this.trackCode;
-    data['repeat'] = this.repeat;
-    data['type'] = this.type;
-    data['views'] = this.views;
+    data['width'] = width;
+    data['height'] = height;
+    data['id'] = id;
+    data['owner_id'] = ownerId;
+    data['title'] = title;
+    data['is_favorite'] = isFavorite;
+    data['track_code'] = trackCode;
+    data['repeat'] = repeat;
+    data['type'] = type;
+    data['views'] = views;
     return data;
   }
 }
@@ -577,11 +577,11 @@ class Image {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['url'] = this.url;
-    data['width'] = this.width;
-    data['height'] = this.height;
-    data['with_padding'] = this.withPadding;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['url'] = url;
+    data['width'] = width;
+    data['height'] = height;
+    data['with_padding'] = withPadding;
     return data;
   }
 }
@@ -600,10 +600,10 @@ class FirstFrame {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['url'] = this.url;
-    data['width'] = this.width;
-    data['height'] = this.height;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['url'] = url;
+    data['width'] = width;
+    data['height'] = height;
     return data;
   }
 }
@@ -620,9 +620,9 @@ class PostSource {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['platform'] = this.platform;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['platform'] = platform;
     return data;
   }
 }
@@ -641,10 +641,10 @@ class Comments {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['can_post'] = this.canPost;
-    data['count'] = this.count;
-    data['groups_can_post'] = this.groupsCanPost;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['can_post'] = canPost;
+    data['count'] = count;
+    data['groups_can_post'] = groupsCanPost;
     return data;
   }
 }
@@ -665,11 +665,11 @@ class Likes {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['can_like'] = this.canLike;
-    data['count'] = this.count;
-    data['user_likes'] = this.userLikes;
-    data['can_publish'] = this.canPublish;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['can_like'] = canLike;
+    data['count'] = count;
+    data['user_likes'] = userLikes;
+    data['can_publish'] = canPublish;
     return data;
   }
 }
@@ -686,9 +686,9 @@ class Reposts {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['count'] = this.count;
-    data['user_reposted'] = this.userReposted;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['count'] = count;
+    data['user_reposted'] = userReposted;
     return data;
   }
 }
@@ -703,8 +703,8 @@ class Views {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['count'] = this.count;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['count'] = count;
     return data;
   }
 }
@@ -719,8 +719,8 @@ class Donut {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['is_donut'] = this.isDonut;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['is_donut'] = isDonut;
     return data;
   }
 }
@@ -741,11 +741,11 @@ class Copyright {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['link'] = this.link;
-    data['type'] = this.type;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['link'] = link;
+    data['type'] = type;
+    data['name'] = name;
     return data;
   }
 }

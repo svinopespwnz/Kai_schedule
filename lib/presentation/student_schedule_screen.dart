@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -45,7 +44,6 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
         ? TabController(length: 6, vsync: this, initialIndex: 0)
         : TabController(length: 6, vsync: this, initialIndex: initialIndex);
     context.read<StudentScheduleCubit>().didScheduleUpdate();
-
   }
 
   @override
@@ -54,13 +52,17 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
     final cubit = context.read<StudentScheduleCubit>();
     return BlocConsumer<StudentScheduleCubit, StudentScheduleState>(
       listener: (context, state) {
-        if (state.status == ResponseStatus.failure) {
+        if (state.status == ResponseStatus.failure && state.data.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text(
                   'Ошибка получения данных, попробуйте позже или проверьте интернет')));
         } else if (state.status == ResponseStatus.groupFailure) {
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text('Группа не найдена')));
+        } else if (state.status == ResponseStatus.failure &&
+            state.data.isNotEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Ошибка получения данных, проверьте интернет')));
         }
       },
       listenWhen: (previous, current) {
@@ -73,29 +75,27 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
         }
       },
       builder: (context, state) => Scaffold(
-        backgroundColor: AppStyles.backgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
-              cubit.state.isButton
+              state.isButton
                   ? GestureDetector(
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(children: [
-                              cubit.state.group.isEmpty
+                              state.group.isEmpty
                                   ? const Text('Группа: ?')
-                                  : Text(cubit.state.group),
+                                  : Text(state.group),
                               const SizedBox(width: 8),
                               const Icon(
                                 Icons.create,
                                 color: AppStyles.iconColor,
                               )
                             ]),
-                            Text(cubit.state.isWeekEven ? 'Четная' : 'Нечетная')
+                            Text(state.isWeekEven ? 'Четная' : 'Нечетная')
                           ]),
                       onTap: () {
                         cubit.toggleTextField(true);
@@ -114,29 +114,28 @@ class _StudentScheduleScreenState extends State<StudentScheduleScreen>
                       },
                     ),
               FlutterSwitch(
-                  activeTextColor: Colors.black87,
-                  inactiveTextColor: Colors.black87,
-                  inactiveColor: AppStyles.backgroundColor,
-                  activeColor: AppStyles.backgroundColor,
+                  activeTextColor: Theme.of(context).extension<SwitchColors>()!.textColor,
+                  inactiveTextColor: Theme.of(context).extension<SwitchColors>()!.textColor,
+                  inactiveColor: Theme.of(context).extension<SwitchColors>()!.backgroundColor,
+                  activeColor: Theme.of(context).extension<SwitchColors>()!.backgroundColor,
                   activeText: "Четная",
                   inactiveText: "Нечетная",
                   valueFontSize: 14.0,
                   width: 120,
                   borderRadius: 25.0,
                   showOnOff: true,
-                  value: cubit.state.switchValue,
+                  value: state.switchValue,
                   onToggle: (value) {
                     cubit.toggleSwitch(value);
                   }),
             ],
           ),
           bottom: TabBar(
-            labelColor: Colors.black87,
             tabs: tabs,
             controller: _tabController,
           ),
         ),
-        body: cubit.state.isLoading
+        body: state.isLoading
             ? const Center(child: CircularProgressIndicator())
             : BodyTabView(tabController: _tabController),
       ),
@@ -161,7 +160,7 @@ class BodyTabView extends StatelessWidget {
     final schedule = scheduleList.isNotEmpty
         ? (switchValue ? scheduleList[1] : scheduleList[0])
         : [];
-    return (scheduleList.isEmpty || cubitState.status != ResponseStatus.success)
+    return (scheduleList.isEmpty && cubitState.status != ResponseStatus.success)
         ? const Center(
             child: Text('Введите номер группы'),
           )
@@ -179,7 +178,6 @@ class StudentDayScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return data.isEmpty
         ? const Center(
             child: Text('Нет занятий'),
