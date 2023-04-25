@@ -23,6 +23,10 @@ abstract class AppStyles {
       color: Color(0xFF1976D2), fontSize: 10.5, fontWeight: FontWeight.w600);
   static const groupNumberTextStyle =
       TextStyle(fontSize: 14, fontWeight: FontWeight.w600);
+  static const modalBottomSheetDisciplineNameTextStyle =
+      TextStyle(fontSize: 26, fontWeight: FontWeight.w600);
+  static const modalBottomSheetScoreTextStyle =
+      TextStyle(fontSize: 18, fontWeight: FontWeight.w400);
   static ThemeData get light {
     return ThemeData(
         cardColor: Colors.white,

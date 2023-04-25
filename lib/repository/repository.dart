@@ -4,13 +4,18 @@ import 'package:kai_schedule/models/student_schedule.dart';
 import 'package:kai_schedule/models/wall_post.dart';
 
 import '../api/vk_api_client.dart';
+import '../local_data_provider/local_data_provider.dart';
 
 class ApiRepository {
   final KaiApiClient _kaiApiClient;
   final VkApiClient _vkApiClient;
-  ApiRepository({KaiApiClient? apiClient, VkApiClient? vkApiClient})
+  final IDataBase _dataBase;
+  ApiRepository(
+      {KaiApiClient? apiClient, VkApiClient? vkApiClient, IDataBase? dataBase})
       : _kaiApiClient = apiClient ?? KaiApiClient(),
-        _vkApiClient = vkApiClient ?? VkApiClient();
+        _vkApiClient = vkApiClient ?? VkApiClient(),
+        _dataBase = dataBase ?? LocalDataProvider();
+
   // Future<bool> isEven() async {
   //   var d0 = DateTime.now().millisecondsSinceEpoch;
   //   var d = DateTime(DateTime.now().year, 1, 1);
@@ -106,8 +111,48 @@ class ApiRepository {
     }
     return scheduleList;
   }
-  Future<WallPost> getWall([int startIndex=0])async{
-    final wall= await _vkApiClient.getWall(startIndex);
-return wall;
+
+  Future<String> getLogin() async {
+    await _dataBase.init();
+    final login = _dataBase.get('login', '');
+    return login;
+  }
+
+  Future<String> getPass() async {
+    final pass = _dataBase.get('pass', '');
+    return pass;
+  }
+
+  Future<void> setLogin<T>(T value) async {
+    _dataBase.set('login', value);
+  }
+
+  Future<void> setPass<T>(T value) async {
+    _dataBase.set('pass', value);
+  }
+
+  Future<void> removeLoginAndPass() async {
+    _dataBase.remove('login');
+    _dataBase.remove('pass');
+  }
+
+  Future<String> authenticate(
+      {required String login, required String pass}) async {
+    final jsession = await _kaiApiClient.authenticate(login: login, pass: pass);
+    return jsession;
+  }
+
+  Future<Map<String, dynamic>> getScore(
+      {required String jsession,
+      String authToken = '',
+      String semester = ''}) async {
+    final scoreData = await _kaiApiClient.fetchScore(
+        authToken: authToken, jsession: jsession, semester: semester);
+    return scoreData;
+  }
+
+  Future<WallPost> getWall([int startIndex = 0]) async {
+    final wall = await _vkApiClient.getWall(startIndex);
+    return wall;
   }
 }

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:kai_schedule/bloc/kai_vk_news_events.dart';
-import 'package:kai_schedule/bloc/kai_vk_news_state.dart';
-import '../repository/repository.dart';
+import 'package:kai_schedule/bloc/kai_vk_news/kai_vk_news_events.dart';
+import 'package:kai_schedule/bloc/kai_vk_news/kai_vk_news_state.dart';
+import '../../repository/repository.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 const throttleDuration = Duration(milliseconds: 100);

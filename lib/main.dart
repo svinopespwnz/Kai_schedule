@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:kai_schedule/bloc/kai_vk_news_bloc.dart';
-import 'package:kai_schedule/bloc/kai_vk_news_events.dart';
-import 'package:kai_schedule/bloc/lecturer_schedule_cubit.dart';
-import 'package:kai_schedule/bloc/navigation_cubit.dart';
-import 'package:kai_schedule/bloc/navigation_state.dart';
-import 'package:kai_schedule/bloc/student_schedule_cubit.dart';
+import 'package:kai_schedule/bloc/kai_vk_news/kai_vk_news_bloc.dart';
+import 'package:kai_schedule/bloc/kai_vk_news/kai_vk_news_events.dart';
+import 'package:kai_schedule/bloc/lecturer_schedule/lecturer_schedule_cubit.dart';
+import 'package:kai_schedule/bloc/navigation/navigation_cubit.dart';
+import 'package:kai_schedule/bloc/navigation/navigation_state.dart';
+import 'package:kai_schedule/bloc/student_schedule/student_schedule_cubit.dart';
+import 'package:kai_schedule/bloc/student_score/student_score_bloc.dart';
+import 'package:kai_schedule/bloc/student_score/student_score_events.dart';
+import 'package:kai_schedule/local_data_provider/local_data_provider.dart';
 import 'package:kai_schedule/presentation/kai_vk_news_screen.dart';
 import 'package:kai_schedule/presentation/lecturer_schedule_screen.dart';
+import 'package:kai_schedule/presentation/score_table_screen.dart';
 import 'package:kai_schedule/presentation/student_schedule_screen.dart';
 import 'package:kai_schedule/repository/repository.dart';
 import 'package:kai_schedule/utility/styles.dart';
@@ -19,7 +23,7 @@ void main() async {
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getTemporaryDirectory(),
   );
-  runApp(MyApp(scheduleRepository: ApiRepository()));
+  runApp(MyApp(scheduleRepository: ApiRepository(dataBase: LocalDataProvider())));
 }
 
 class MyApp extends StatelessWidget {
@@ -66,20 +70,37 @@ class _RootScreenState extends State<RootScreen> {
           builder: (context, state) {
         return BottomNavigationBar(
           currentIndex: context.read<NavigationCubit>().state.index,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.schedule), label: 'Расписание'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.school), label: 'Преподаватели'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.newspaper), label: 'Новости')
-          ],
+          selectedLabelStyle: AppStyles.selectedLabelStyle,
           onTap: (index) {
             context.read<NavigationCubit>().getNavBarItem(index);
             _pageController.jumpToPage(index);
           },
-
-          selectedLabelStyle: AppStyles.selectedLabelStyle,
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.schedule),
+              label: 'Расписание',
+              backgroundColor:
+                  Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.school),
+              label: 'Преподаватели',
+              backgroundColor:
+                  Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.person),
+              label: 'БРС',
+              backgroundColor:
+                  Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.newspaper),
+              label: 'Новости',
+              backgroundColor:
+                  Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            )
+          ],
         );
       }),
       body: BlocBuilder<NavigationCubit, NavigationState>(
@@ -96,6 +117,11 @@ class _RootScreenState extends State<RootScreen> {
                 create: (context) =>
                     LecturerScheduleCubit(context.read<ApiRepository>()),
                 child: const LecturerScheduleScreen()),
+            BlocProvider(
+                create: (context) =>
+                    StudentScoreBloc(context.read<ApiRepository>())..add(AuthCheckEvent()),
+                lazy: false,
+                child: const ScoreTableScreen()),
             BlocProvider(
               create: (context) => KaiVkNewsBloc(context.read<ApiRepository>())
                 ..add(PostFetched()),

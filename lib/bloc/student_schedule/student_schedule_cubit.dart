@@ -1,10 +1,10 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:kai_schedule/bloc/response_status_enum.dart';
-import 'package:kai_schedule/bloc/student_schedule_state.dart';
+import 'package:kai_schedule/bloc/student_schedule/student_schedule_state.dart';
 import 'package:kai_schedule/models/student_schedule.dart';
 import 'package:kai_schedule/utility/exceptions.dart';
 import 'package:kai_schedule/utility/get_week_parity.dart' as week_parity;
-import '../repository/repository.dart';
+import '../../repository/repository.dart';
 
 class StudentScheduleCubit extends Cubit<StudentScheduleState>
     with HydratedMixin {

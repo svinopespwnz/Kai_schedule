@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:kai_schedule/bloc/response_status_enum.dart';
-import 'package:kai_schedule/bloc/student_schedule_cubit.dart';
-import 'package:kai_schedule/bloc/student_schedule_state.dart';
+import 'package:kai_schedule/bloc/student_schedule/student_schedule_cubit.dart';
+import 'package:kai_schedule/bloc/student_schedule/student_schedule_state.dart';
 import 'package:kai_schedule/models/student_schedule.dart';
 import 'package:kai_schedule/utility/styles.dart';
 

@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:kai_schedule/bloc/lecturer_schedule_state.dart';
+import 'package:kai_schedule/bloc/lecturer_schedule/lecturer_schedule_state.dart';
 import 'package:kai_schedule/bloc/response_status_enum.dart';
 import 'package:kai_schedule/repository/repository.dart';
 import 'package:kai_schedule/utility/exceptions.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kai_schedule/bloc/kai_vk_news_bloc.dart';
-import 'package:kai_schedule/bloc/kai_vk_news_state.dart';
+import 'package:kai_schedule/bloc/kai_vk_news/kai_vk_news_bloc.dart';
+import 'package:kai_schedule/bloc/kai_vk_news/kai_vk_news_state.dart';
 import 'package:kai_schedule/models/wall_post.dart' show Items;
 
-import '../bloc/kai_vk_news_events.dart';
+import '../bloc/kai_vk_news/kai_vk_news_events.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({Key? key}) : super(key: key);

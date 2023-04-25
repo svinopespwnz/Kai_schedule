@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kai_schedule/bloc/lecturer_schedule_cubit.dart';
-import 'package:kai_schedule/bloc/lecturer_schedule_state.dart';
+import 'package:kai_schedule/bloc/lecturer_schedule/lecturer_schedule_cubit.dart';
+import 'package:kai_schedule/bloc/lecturer_schedule/lecturer_schedule_state.dart';
 import 'package:kai_schedule/bloc/response_status_enum.dart';
 import 'package:kai_schedule/models/lecturer_schedule.dart';
 import 'package:kai_schedule/utility/styles.dart';
